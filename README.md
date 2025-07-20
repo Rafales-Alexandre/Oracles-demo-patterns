@@ -1,46 +1,46 @@
 # Oracle Demo Patterns
 
-Ce repository démontre un mécanisme d'oracle blockchain simple utilisant des smart contracts Solidity et un script TypeScript off-chain pour les mises à jour automatiques. Il permet de maintenir des données à jour sur la blockchain avec un système de mise à jour périodique. La configuration utilise Hardhat pour le développement local et les tests.
+This repository demonstrates a simple blockchain oracle mechanism using Solidity smart contracts and an off-chain TypeScript script for automatic updates. It allows maintaining up-to-date data on the blockchain with a periodic update system. The setup uses Hardhat for local development and testing.
 
-> **⚠️ Ceci est un exemple pédagogique — pas prêt pour la production. Auditez toujours le code avant toute utilisation réelle.**
-
----
-
-## Comment fonctionne l'Oracle
-
-1. **Smart Contract Oracle** : Stocke les données et les timestamps, avec contrôle d'accès.
-2. **Script Updater** : Se connecte périodiquement pour mettre à jour les données.
-3. **Système d'événements** : Émet des événements pour tracer les mises à jour.
-4. **Interface publique** : Permet de consulter les données actuelles.
+> **⚠️ This is a pedagogical example — not production-ready. Always audit code before any real use.**
 
 ---
 
-## Prérequis
+## How the Oracle Works
 
-- Node.js (v18+ recommandé)
-- npm ou yarn
-- Connaissances de base en Solidity, TypeScript et développement Ethereum
+1. **Smart Contract Oracle** : Stores data and timestamps with access control.
+2. **Updater Script** : Connects periodically to update the data.
+3. **Event System** : Emits events to track updates.
+4. **Public Interface** : Allows querying current data.
+
+---
+
+## Prerequisites
+
+- Node.js (v18+ recommended)
+- npm or yarn
+- Basic knowledge of Solidity, TypeScript, and Ethereum development
 
 ---
 
 ## Installation
 
-Clonez le repository :
+Clone the repository:
 
 ```bash
 git clone <your-repo-url>
 cd Oracles-demo-patterns
 ```
 
-Installez les dépendances :
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Cela inclut Hardhat, Ethers.js, Axios, TypeScript et les bibliothèques de test.
+This includes Hardhat, Ethers.js, Axios, TypeScript, and testing libraries.
 
-Compilez les contrats Solidity :
+Compile the Solidity contracts:
 
 ```bash
 npx hardhat compile
@@ -48,33 +48,33 @@ npx hardhat compile
 
 ---
 
-## Structure du Projet
+## Project Structure
 
 ```
-contracts/           # Fichiers Solidity
-  └─ Oracle.sol            # Contrat Oracle principal
-scripts/            # Scripts TypeScript
-  ├─ deploy.ts            # Déploie le contrat Oracle
-  ├─ Updater.ts           # Script de mise à jour automatique
-  ├─ simpleTest.ts        # Test simple de l'oracle
-  ├─ testOracle.ts        # Tests complets de l'oracle
-  └─ liveOracle.ts        # Test en direct de l'oracle
-test/               # Tests TypeScript unitaires
-  ├─ Oracle.test.ts       # Tests d'interaction avec le contrat
+contracts/           # Solidity files
+  └─ Oracle.sol            # Main Oracle contract
+scripts/            # TypeScript scripts
+  ├─ deploy.ts            # Deploys the Oracle contract
+  ├─ Updater.ts           # Automatic update script
+  ├─ simpleTest.ts        # Simple Oracle test
+  ├─ testOracle.ts        # Complete Oracle tests
+  └─ liveOracle.ts        # Live Oracle test
+test/               # TypeScript unit tests
+  ├─ Oracle.test.ts       # Contract interaction tests
   └─ OracleIntegration.test.ts
-ignition/           # Modules de déploiement Ignition
+ignition/           # Ignition deployment modules
   └─ modules/
-      └─ DeployOracle.ts  # Module de déploiement Ignition
-hardhat.config.ts   # Configuration Hardhat
+      └─ DeployOracle.ts  # Ignition deployment module
+hardhat.config.ts   # Hardhat configuration
 ```
 
 ---
 
-## Explication du Code
+## Code Explanation
 
-### Oracle.sol (Contrat Principal)
+### Oracle.sol (Main Contract)
 
-Ce contrat gère le stockage des données et les mises à jour avec contrôle d'accès. Seul l'oracleUpdater peut modifier les données.
+This contract manages data storage and updates with access control. Only the oracleUpdater can modify the data.
 
 ```solidity
 contract Oracle {
@@ -105,20 +105,20 @@ contract Oracle {
 }
 ```
 
-- **updateData** : Met à jour les données et le timestamp, émet `DataUpdated`.
-- **getData** : Retourne les données actuelles et le timestamp de la dernière mise à jour.
-- **onlyOracle** : Modificateur qui restreint l'accès à l'oracleUpdater.
+- **updateData** : Updates the data and timestamp, emits `DataUpdated`.
+- **getData** : Returns current data and timestamp of last update.
+- **onlyOracle** : Modifier that restricts access to oracleUpdater.
 
-### Script Updater (Updater.ts)
+### Updater Script (Updater.ts)
 
-Le script de mise à jour se connecte périodiquement à l'oracle et met à jour les données avec de nouvelles valeurs.
+The update script connects periodically to the oracle and updates the data with new values.
 
 ```typescript
 async function updateOracle(): Promise<void> {
   try {
     console.log('Updating oracle...');
     
-    // Pour les tests, utilise une valeur aléatoire
+    // For testing, use a random value
     const value: number = Math.floor(Math.random() * 1000);
     
     const tx: ethers.ContractTransactionResponse = await contract.updateData(value);
@@ -129,174 +129,174 @@ async function updateOracle(): Promise<void> {
   }
 }
 
-// Mise à jour immédiate puis toutes les 5 minutes
+// Immediate update then every 5 minutes
 updateOracle();
 setInterval(updateOracle, 5 * 60 * 1000);
 ```
 
-- Se connecte au réseau localhost
-- Met à jour l'oracle toutes les 5 minutes
-- Utilise des valeurs aléatoires pour les tests
-- Gère les erreurs avec try/catch
+- Connects to localhost network
+- Updates oracle every 5 minutes
+- Uses random values for testing
+- Handles errors with try/catch
 
-> **Note** : Pour la production, remplacez la valeur aléatoire par un appel API réel.
+> **Note** : For production, replace the random value with a real API call.
 
 ---
 
-## Utilisation Étape par Étape
+## Step-by-Step Usage
 
-### 1. Démarrer le Nœud Hardhat Local
+### 1. Start the Local Hardhat Node
 
 ```bash
 npm run node
 ```
 
-Cela démarre un serveur JSON-RPC à http://127.0.0.1:8545 avec des comptes de test prédéfinis.
+This starts a JSON-RPC server at http://127.0.0.1:8545 with predefined test accounts.
 
-> **Conseil** : Redémarrez le nœud si vous rencontrez des problèmes de nonce ou d'état (Ctrl+C puis relancez).
+> **Tip** : Restart the node if you encounter nonce or state issues (Ctrl+C then relaunch).
 
-### 2. Déployer le Contrat Oracle
+### 2. Deploy the Oracle Contract
 
-Dans un nouveau terminal :
+In a new terminal:
 
 ```bash
 npm run deploy:local
 ```
 
-Cela déploie le contrat Oracle sur le réseau localhost.
-Copiez l'adresse déployée depuis la console.
-Mettez à jour cette adresse dans `scripts/Updater.ts`.
+This deploys the Oracle contract to localhost.
+Copy the deployed address from the console.
+Update this address in `scripts/Updater.ts`.
 
-- **Déployeur** : Compte Hardhat #0 (`0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`)
-- **Oracle Updater** : Même compte que le déployeur
+- **Deployer** : Hardhat account #0 (`0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`)
+- **Oracle Updater** : Same account as deployer
 
-### 3. Lancer le Script de Mise à Jour
+### 3. Launch the Update Script
 
-Le script de mise à jour écoute et met à jour automatiquement l'oracle :
+The update script listens and automatically updates the oracle:
 
 ```bash
 npm run updater
 ```
 
-Il utilise la clé privée du compte #0 comme oracleUpdater (autorisé dans le contrat).
+It uses account #0's private key as oracleUpdater (authorized in the contract).
 
-### 4. Tester l'Oracle
+### 4. Test the Oracle
 
-#### Test Simple
+#### Simple Test
 ```bash
 npx hardhat run scripts/simpleTest.ts --network localhost
 ```
 
-#### Tests Complets
+#### Complete Tests
 ```bash
 npm run test:oracle
 ```
 
-#### Tests Unitaires
+#### Unit Tests
 ```bash
 npm run test
 ```
 
-### 5. Vérifier les Mises à Jour
+### 5. Verify Updates
 
-Le script de mise à jour affiche :
-- Timestamp de chaque mise à jour
-- Valeur mise à jour
-- Erreurs éventuelles
+The update script displays:
+- Timestamp of each update
+- Updated value
+- Any errors
 
-**Sortie attendue :**
+**Expected output:**
 ```
 Updating oracle...
 Updater started. Updating every 5 minutes...
 Data updated with value: 847
 ```
 
-> **Si des erreurs surviennent** (problèmes de connexion, nonce, etc.) :
-> - Vérifiez que la clé de l'oracleUpdater correspond à celle autorisée.
-> - Redémarrez le nœud et redéployez si l'état est corrompu.
+> **If errors occur** (connection issues, nonce, etc.):
+> - Ensure the oracleUpdater key matches the authorized one.
+> - Restart the node and redeploy if the state is corrupted.
 
 ---
 
-## Configuration Avancée
+## Advanced Configuration
 
-### Modifier l'Intervalle de Mise à Jour
+### Modify Update Interval
 
-Dans `scripts/Updater.ts`, ligne 46 :
+In `scripts/Updater.ts`, line 46:
 ```typescript
 setInterval(updateOracle, 5 * 60 * 1000); // 5 minutes
 ```
 
-### Utiliser une API Réelle
+### Use a Real API
 
-Dans `scripts/Updater.ts`, remplacez les lignes 25-28 :
+In `scripts/Updater.ts`, replace lines 25-28:
 ```typescript
-// Remplacez par votre API réelle
+// Replace with your real API
 const response = await axios.get('https://your-api.com/data');
 const value: number = response.data.value;
 ```
 
-### Déployer sur un Autre Réseau
+### Deploy to Another Network
 
-1. Modifiez `hardhat.config.ts` pour ajouter votre réseau
-2. Utilisez `npm run deploy` au lieu de `npm run deploy:local`
-
----
-
-## Sécurité et Limitations
-
-- **Démo simplifiée** : Ajoutez multisig, pause, audits, limites de taux pour la production.
-- **Updater centralisé** : Pour la production, considérez Chainlink, zk-proofs, etc.
-- **N'utilisez jamais de vrais fonds ou du code non audité !**
+1. Modify `hardhat.config.ts` to add your network
+2. Use `npm run deploy` instead of `npm run deploy:local`
 
 ---
 
-## Dépannage
+## Security & Limitations
 
-- **Erreurs de Nonce** : Redémarrez le nœud Hardhat et redéployez.
-- **Erreurs de Connexion** : Vérifiez que le nœud local est accessible sur `http://127.0.0.1:8545`.
-- **Erreurs de Déploiement** : Nettoyez le cache avec `npm run clean`.
-- **"Not authorized"** : Vérifiez la clé de l'oracleUpdater.
+- **Simplified demo** : Add multisig, pause, audits, rate limits for production.
+- **Centralized updater** : For production, consider Chainlink, zk-proofs, etc.
+- **Never use real funds or unaudited code!**
 
 ---
 
-## Scripts Disponibles
+## Troubleshooting
 
-| Commande | Description |
+- **Nonce Errors** : Restart the Hardhat node and redeploy.
+- **Connection Errors** : Verify local node is accessible on `http://127.0.0.1:8545`.
+- **Deployment Errors** : Clean cache with `npm run clean`.
+- **"Not authorized"** : Check the oracleUpdater key.
+
+---
+
+## Available Scripts
+
+| Command | Description |
 |----------|-------------|
-| `npm run node` | Démarre un nœud Hardhat local |
-| `npm run deploy:local` | Déploie Oracle sur localhost |
-| `npm run updater` | Lance le script de mise à jour automatique |
-| `npm run test:oracle` | Tests complets de l'oracle |
-| `npm run test` | Tests unitaires |
-| `npm run compile` | Compile les contrats |
-| `npm run clean` | Nettoie les artefacts de build |
+| `npm run node` | Starts a local Hardhat node |
+| `npm run deploy:local` | Deploys Oracle to localhost |
+| `npm run updater` | Launches automatic updater |
+| `npm run test:oracle` | Complete Oracle tests |
+| `npm run test` | Unit tests |
+| `npm run compile` | Compiles contracts |
+| `npm run clean` | Cleans build artifacts |
 
 ---
 
-## Surveillance
+## Monitoring
 
-### Vérifier le Statut de l'Oracle
+### Check Oracle Status
 ```bash
 npx hardhat run scripts/simpleTest.ts --network localhost
 ```
 
-### Suivre les Mises à Jour
-Les logs du script de mise à jour affichent :
-- Timestamp de chaque mise à jour
-- Valeur mise à jour
-- Erreurs éventuelles
+### Track Updates
+The update script logs display:
+- Timestamp of each update
+- Updated value
+- Any errors
 
 ---
 
-## Prochaines Étapes
+## Next Steps
 
-1. **Personnaliser l'API** : Remplacez l'API factice par votre vraie source de données
-2. **Ajouter des Métriques** : Intégrez des outils de surveillance
-3. **Déployer en Production** : Configurez pour un réseau public
-4. **Ajouter des Tests** : Étendez la couverture de tests
+1. **Customize API** : Replace mock API with your real data source
+2. **Add Metrics** : Integrate monitoring tools
+3. **Deploy to Production** : Configure for public network
+4. **Add Tests** : Extend test coverage
 
 ---
 
-## Remerciements
+## Acknowledgements
 
-Inspiré par les concepts d'oracles blockchain — les contributions sont les bienvenues ! Si ce projet vous aide, merci de mettre une étoile au repo ⭐.
+Inspired by blockchain oracle concepts — contributions welcome! If this project helps you, please star the repo ⭐.
