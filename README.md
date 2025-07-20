@@ -54,7 +54,6 @@ npx hardhat compile
 contracts/           # Solidity files
   └─ Oracle.sol            # Main Oracle contract
 scripts/            # TypeScript scripts
-  ├─ deploy.ts            # Deploys the Oracle contract
   ├─ Updater.ts           # Automatic update script
   ├─ simpleTest.ts        # Simple Oracle test
   ├─ testOracle.ts        # Complete Oracle tests
@@ -163,9 +162,9 @@ In a new terminal:
 npm run deploy:local
 ```
 
-This deploys the Oracle contract to localhost.
-Copy the deployed address from the console.
-Update this address in `scripts/Updater.ts`.
+This deploys the Oracle contract to localhost using Hardhat Ignition.
+The deployment address will be automatically saved in `ignition/deployments/chain-1337/deployed_addresses.json`.
+Update this address in `scripts/Updater.ts` if needed.
 
 - **Deployer** : Hardhat account #0 (`0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`)
 - **Oracle Updater** : Same account as deployer
