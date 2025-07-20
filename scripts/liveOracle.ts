@@ -2,147 +2,147 @@ import { ethers } from "hardhat";
 import axios from "axios";
 
 async function main() {
-  console.log("🌐 Oracle en temps réel - Test avec vraie API...");
+  console.log("🌐 Live Oracle - Test with real API...");
 
-  // Récupération du signer
+  // Get signer
   const [deployer] = await ethers.getSigners();
   console.log("👤 Oracle Updater:", deployer.address);
 
-  // Adresse du contrat déployé
+  // Deployed contract address
   const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   
-  // Récupération du contrat
+  // Get contract
   const Oracle = await ethers.getContractFactory("Oracle");
   const oracle = Oracle.attach(contractAddress);
 
-  console.log("📋 Contrat Oracle:", contractAddress);
+  console.log("📋 Oracle Contract:", contractAddress);
 
-  // Fonction pour récupérer le prix du Bitcoin
+  // Function to get Bitcoin price
   async function getBitcoinPrice(): Promise<number> {
     try {
-      console.log("🔍 Récupération du prix du Bitcoin...");
+      console.log("🔍 Fetching Bitcoin price...");
       const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
       const price = response.data.bitcoin.usd;
-      console.log(`   💰 Prix du Bitcoin: $${price}`);
-      return Math.floor(price * 100); // Conversion en centimes pour éviter les décimales
+      console.log(`   💰 Bitcoin price: $${price}`);
+      return Math.floor(price * 100); // Convert to cents to avoid decimals
     } catch (error) {
-      console.log("   ⚠️ Erreur API, utilisation d'une valeur par défaut");
-      return 50000; // Valeur par défaut en cas d'erreur
+      console.log("   ⚠️ API error, using default value");
+      return 50000; // Default value in case of error
     }
   }
 
-  // Fonction pour récupérer le prix de l'Ethereum
+  // Function to get Ethereum price
   async function getEthereumPrice(): Promise<number> {
     try {
-      console.log("🔍 Récupération du prix de l'Ethereum...");
+      console.log("🔍 Fetching Ethereum price...");
       const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
       const price = response.data.ethereum.usd;
-      console.log(`   💰 Prix de l'Ethereum: $${price}`);
-      return Math.floor(price * 100); // Conversion en centimes
+      console.log(`   💰 Ethereum price: $${price}`);
+      return Math.floor(price * 100); // Convert to cents
     } catch (error) {
-      console.log("   ⚠️ Erreur API, utilisation d'une valeur par défaut");
-      return 3000; // Valeur par défaut en cas d'erreur
+      console.log("   ⚠️ API error, using default value");
+      return 3000; // Default value in case of error
     }
   }
 
-  // Fonction pour mettre à jour l'oracle
+  // Function to update oracle
   async function updateOracle(value: number, description: string) {
     try {
-      console.log(`📝 Mise à jour de l'oracle avec: ${description}`);
+      console.log(`📝 Updating oracle with: ${description}`);
       const tx = await oracle.connect(deployer).updateData(value);
-      console.log("   Transaction envoyée:", tx.hash);
+      console.log("   Transaction sent:", tx.hash);
       
       const receipt = await tx.wait();
-      console.log("   ✅ Transaction confirmée dans le bloc:", receipt?.blockNumber);
+      console.log("   ✅ Transaction confirmed in block:", receipt?.blockNumber);
       
-      // Vérification
+      // Verification
       const [data, timestamp] = await oracle.getData();
-      console.log(`   📊 Données mises à jour: ${data} (${description})`);
+      console.log(`   📊 Updated data: ${data} (${description})`);
       console.log(`   ⏰ Timestamp: ${new Date(Number(timestamp) * 1000).toLocaleString()}`);
       
       return true;
     } catch (error) {
-      console.log("   ❌ Erreur lors de la mise à jour:", (error as Error).message);
+      console.log("   ❌ Error during update:", (error as Error).message);
       return false;
     }
   }
 
-  // Test 1: Prix du Bitcoin
+  // Test 1: Bitcoin price
   console.log("\n" + "=".repeat(50));
-  console.log("🪙 TEST 1: Prix du Bitcoin");
+  console.log("🪙 TEST 1: Bitcoin Price");
   console.log("=".repeat(50));
   
   const btcPrice = await getBitcoinPrice();
-  await updateOracle(btcPrice, `Prix Bitcoin: $${btcPrice / 100}`);
+  await updateOracle(btcPrice, `Bitcoin Price: $${btcPrice / 100}`);
 
-  // Attendre 5 secondes
-  console.log("\n⏳ Attente de 5 secondes...");
+  // Wait 5 seconds
+  console.log("\n⏳ Waiting 5 seconds...");
   await new Promise(resolve => setTimeout(resolve, 5000));
 
-  // Test 2: Prix de l'Ethereum
+  // Test 2: Ethereum price
   console.log("\n" + "=".repeat(50));
-  console.log("🔷 TEST 2: Prix de l'Ethereum");
+  console.log("🔷 TEST 2: Ethereum Price");
   console.log("=".repeat(50));
   
   const ethPrice = await getEthereumPrice();
-  await updateOracle(ethPrice, `Prix Ethereum: $${ethPrice / 100}`);
+  await updateOracle(ethPrice, `Ethereum Price: $${ethPrice / 100}`);
 
-  // Test 3: Simulation d'un oracle météo (données simulées)
+  // Test 3: Weather oracle simulation (simulated data)
   console.log("\n" + "=".repeat(50));
-  console.log("🌤️ TEST 3: Oracle Météo (simulé)");
+  console.log("🌤️ TEST 3: Weather Oracle (simulated)");
   console.log("=".repeat(50));
   
   const weatherData = {
-    temperature: 22, // degrés Celsius
-    humidity: 65,    // pourcentage
+    temperature: 22, // degrees Celsius
+    humidity: 65,    // percentage
     pressure: 1013   // hPa
   };
   
-  // Encodage des données météo dans un seul nombre
+  // Encode weather data into a single number
   const encodedWeather = weatherData.temperature * 10000 + weatherData.humidity * 100 + weatherData.pressure;
-  console.log("   🌡️ Données météo simulées:", weatherData);
-  console.log("   🔢 Données encodées:", encodedWeather);
+  console.log("   🌡️ Simulated weather data:", weatherData);
+  console.log("   🔢 Encoded data:", encodedWeather);
   
-  await updateOracle(encodedWeather, `Météo: ${weatherData.temperature}°C, ${weatherData.humidity}% humidité, ${weatherData.pressure}hPa`);
+  await updateOracle(encodedWeather, `Weather: ${weatherData.temperature}°C, ${weatherData.humidity}% humidity, ${weatherData.pressure}hPa`);
 
-  // Test 4: Oracle de taux de change (simulé)
+  // Test 4: Exchange rate oracle (simulated)
   console.log("\n" + "=".repeat(50));
-  console.log("💱 TEST 4: Taux de change EUR/USD (simulé)");
+  console.log("💱 TEST 4: EUR/USD Exchange Rate (simulated)");
   console.log("=".repeat(50));
   
   const exchangeRate = 1.0850; // EUR/USD
-  const encodedRate = Math.floor(exchangeRate * 10000); // Encodage avec 4 décimales
-  console.log("   💱 Taux EUR/USD simulé:", exchangeRate);
-  console.log("   🔢 Taux encodé:", encodedRate);
+  const encodedRate = Math.floor(exchangeRate * 10000); // Encode with 4 decimals
+  console.log("   💱 Simulated EUR/USD rate:", exchangeRate);
+  console.log("   🔢 Encoded rate:", encodedRate);
   
-  await updateOracle(encodedRate, `Taux EUR/USD: ${exchangeRate}`);
+  await updateOracle(encodedRate, `EUR/USD Rate: ${exchangeRate}`);
 
-  // Test 5: Vérification finale et historique
+  // Test 5: Final verification and history
   console.log("\n" + "=".repeat(50));
-  console.log("📊 ÉTAT FINAL DE L'ORACLE");
+  console.log("📊 FINAL ORACLE STATE");
   console.log("=".repeat(50));
   
   const [finalData, finalTimestamp] = await oracle.getData();
-  console.log("   📈 Dernière valeur:", finalData.toString());
-  console.log("   ⏰ Dernière mise à jour:", new Date(Number(finalTimestamp) * 1000).toLocaleString());
+  console.log("   📈 Last value:", finalData.toString());
+  console.log("   ⏰ Last update:", new Date(Number(finalTimestamp) * 1000).toLocaleString());
   console.log("   🔑 Oracle Updater:", await oracle.oracleUpdater());
 
-  console.log("\n🎉 Tests de l'oracle en temps réel terminés !");
-  console.log("\n💡 Note: Les données réelles proviennent de l'API CoinGecko");
-  console.log("   Les données météo et de change sont simulées pour la démonstration");
+  console.log("\n🎉 Live oracle tests completed!");
+  console.log("\n💡 Note: Real data comes from CoinGecko API");
+  console.log("   Weather and exchange rate data are simulated for demonstration");
 }
 
 main()
   .then(() => {
-    console.log("\n📋 Résumé des tests en temps réel:");
-    console.log("   ✅ Prix Bitcoin récupéré et mis à jour");
-    console.log("   ✅ Prix Ethereum récupéré et mis à jour");
-    console.log("   ✅ Données météo simulées et encodées");
-    console.log("   ✅ Taux de change simulé et encodé");
-    console.log("   ✅ Toutes les mises à jour confirmées sur la blockchain");
+    console.log("\n📋 Live test summary:");
+    console.log("   ✅ Bitcoin price fetched and updated");
+    console.log("   ✅ Ethereum price fetched and updated");
+    console.log("   ✅ Simulated weather data encoded");
+    console.log("   ✅ Simulated exchange rate encoded");
+    console.log("   ✅ All updates confirmed on blockchain");
     process.exit(0);
   })
   .catch((error) => {
-    console.error("❌ Erreur lors des tests en temps réel:", error);
+    console.error("❌ Error during live tests:", error);
     process.exit(1);
   }); 

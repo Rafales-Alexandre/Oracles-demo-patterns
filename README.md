@@ -57,7 +57,7 @@ scripts/            # TypeScript scripts
   ├─ Updater.ts           # Automatic update script
   ├─ simpleTest.ts        # Simple Oracle test
   ├─ testOracle.ts        # Complete Oracle tests
-  └─ liveOracle.ts        # Live Oracle test
+  └─ liveOracle.ts        # Live Oracle test with real APIs
 test/               # TypeScript unit tests
   ├─ Oracle.test.ts       # Contract interaction tests
   └─ OracleIntegration.test.ts
