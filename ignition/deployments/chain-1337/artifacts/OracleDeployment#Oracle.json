@@ -1,0 +1,79 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Oracle",
+  "sourceName": "contracts/Oracle.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "DataUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "getData",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "oracleUpdater",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateData",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b50600280546001600160a01b03191633179055610187806100316000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c806309e96008146100465780633bc5de301461005b578063805d64a01461007b575b600080fd5b610059610054366004610138565b6100a6565b005b600054600154604080519283526020830191909152015b60405180910390f35b60025461008e906001600160a01b031681565b6040516001600160a01b039091168152602001610072565b6002546001600160a01b031633146100f55760405162461bcd60e51b815260206004820152600e60248201526d139bdd08185d5d1a1bdc9a5e995960921b604482015260640160405180910390fd5b600081905542600181905560405190815281907f5ac7f55879f610b0e93ec74d5d8857f9b3bbba8d486cc8156ab0282fba4273f99060200160405180910390a250565b60006020828403121561014a57600080fd5b503591905056fea2646970667358221220ed32f56e0afb31019bafb07d104c886d8d64ddc55969fb95378e1fce57e9350464736f6c634300081c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100415760003560e01c806309e96008146100465780633bc5de301461005b578063805d64a01461007b575b600080fd5b610059610054366004610138565b6100a6565b005b600054600154604080519283526020830191909152015b60405180910390f35b60025461008e906001600160a01b031681565b6040516001600160a01b039091168152602001610072565b6002546001600160a01b031633146100f55760405162461bcd60e51b815260206004820152600e60248201526d139bdd08185d5d1a1bdc9a5e995960921b604482015260640160405180910390fd5b600081905542600181905560405190815281907f5ac7f55879f610b0e93ec74d5d8857f9b3bbba8d486cc8156ab0282fba4273f99060200160405180910390a250565b60006020828403121561014a57600080fd5b503591905056fea2646970667358221220ed32f56e0afb31019bafb07d104c886d8d64ddc55969fb95378e1fce57e9350464736f6c634300081c0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
