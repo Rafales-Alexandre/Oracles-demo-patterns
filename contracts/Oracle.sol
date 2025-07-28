@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.27;
+
+error NotAuthorized();
 
 contract Oracle {
     uint256 private data;
@@ -13,7 +15,7 @@ contract Oracle {
     }
     
     modifier onlyOracle() {
-        require(msg.sender == oracleUpdater, "Not authorized");
+        if(msg.sender != oracleUpdater) revert NotAuthorized();
         _;
     }
     
